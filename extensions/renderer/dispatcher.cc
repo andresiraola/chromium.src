@@ -125,6 +125,13 @@ using blink::WebVector;
 using blink::WebView;
 using content::RenderThread;
 
+#include "cef/libcef/node/node_integration.h"
+
+#include "third_party/node/src/node_webkit.h"
+
+UVRunFn g_uv_run_fn = nullptr;
+SetUVRunFn g_set_uv_run_fn = nullptr;
+
 namespace extensions {
 
 namespace {
@@ -286,6 +293,8 @@ void Dispatcher::DidCreateScriptContext(
       module_system->SetLazyField(chrome, "Event", kEventBindings, "Event");
   }
 
+  nw::ContextCreationHook(frame, context);
+
   UpdateBindingsForContext(context);
 
   bool is_within_platform_app = IsWithinPlatformApp();
@@ -432,6 +441,10 @@ void Dispatcher::WillReleaseScriptContext(
   ScriptContext* context = script_context_set_->GetByV8Context(v8_context);
   if (!context)
     return;
+    
+  if (context && script_context_set_->size() == 1) {
+    nw::OnRenderProcessShutdownHook(context);
+  }
 
   // TODO(kalman): Make |request_sender| use |context->AddInvalidationObserver|.
   // In fact |request_sender_| should really be owned by ScriptContext.
@@ -458,6 +471,8 @@ void Dispatcher::DidCreateDocumentElement(blink::WebLocalFrame* frame) {
   // are hosted in the extension process.
   GURL effective_document_url = ScriptContext::GetEffectiveDocumentURL(
       frame, frame->document().url(), true /* match_about_blank */);
+      
+  nw::DocumentElementHook(frame, effective_document_url);
 
   const Extension* extension =
       RendererExtensionRegistry::Get()->GetExtensionOrAppByURL(

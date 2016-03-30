@@ -28,6 +28,7 @@ class StreamContext
  public:
   StreamContext();
 
+  CONTENT_EXPORT static const void* GetUserDataKey();
   CONTENT_EXPORT static StreamContext* GetFor(BrowserContext* browser_context);
 
   void InitializeOnIOThread();

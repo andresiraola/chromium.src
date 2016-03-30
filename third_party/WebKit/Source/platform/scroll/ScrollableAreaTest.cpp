@@ -4,6 +4,7 @@
 
 #include "platform/scroll/ScrollableArea.h"
 
+#include "platform/graphics/Color.h"
 #include "platform/graphics/GraphicsLayer.h"
 #include "platform/scroll/ScrollbarTheme.h"
 #include "platform/scroll/ScrollbarThemeMock.h"
@@ -166,6 +167,17 @@ TEST_F(ScrollableAreaTest, ScrollbarGraphicsLayerInvalidation)
     graphicsLayer.resetTrackedPaintInvalidations();
     scrollbar->setNeedsPaintInvalidation(NoPart);
     EXPECT_TRUE(graphicsLayer.hasTrackedPaintInvalidations());
+}
+
+TEST_F(ScrollableAreaTest, RecalculatesScrollbarOverlayIfBackgroundChanges)
+{
+    OwnPtrWillBeRawPtr<MockScrollableArea> scrollableArea = MockScrollableArea::create(IntPoint(0, 100));
+
+    EXPECT_EQ(ScrollbarOverlayStyleDefault, scrollableArea->scrollbarOverlayStyle());
+    scrollableArea->recalculateScrollbarOverlayStyle(Color(34, 85, 51));
+    EXPECT_EQ(ScrollbarOverlayStyleLight, scrollableArea->scrollbarOverlayStyle());
+    scrollableArea->recalculateScrollbarOverlayStyle(Color(236, 143, 185));
+    EXPECT_EQ(ScrollbarOverlayStyleDefault, scrollableArea->scrollbarOverlayStyle());
 }
 
 } // namespace blink

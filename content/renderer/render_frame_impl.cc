@@ -4687,7 +4687,6 @@ WebNavigationPolicy RenderFrameImpl::decidePolicyForNavigation(
       (pending_navigation_params_ &&
        !pending_navigation_params_->request_params.redirects.empty());
 
-#ifdef OS_ANDROID
   // The handlenavigation API is deprecated and will be removed once
   // crbug.com/325351 is resolved.
   if (info.urlRequest.url() != GURL(kSwappedOutURL) &&
@@ -4697,7 +4696,6 @@ WebNavigationPolicy RenderFrameImpl::decidePolicyForNavigation(
           is_redirect)) {
     return blink::WebNavigationPolicyIgnore;
   }
-#endif
 
   Referrer referrer(
       RenderViewImpl::GetReferrerFromRequest(frame_, info.urlRequest));

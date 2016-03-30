@@ -137,6 +137,13 @@ GpuProcessTransportFactory::CreateOffscreenCommandBufferContext() {
 scoped_ptr<cc::SoftwareOutputDevice>
 GpuProcessTransportFactory::CreateSoftwareOutputDevice(
     ui::Compositor* compositor) {
+  if (compositor->delegate()) {
+    scoped_ptr<cc::SoftwareOutputDevice> output_device =
+        compositor->delegate()->CreateSoftwareOutputDevice(compositor);
+    if (output_device.get())
+      return output_device;
+  }
+
 #if defined(MOJO_RUNNER_CLIENT)
   if (IsRunningInMojoShell()) {
     return scoped_ptr<cc::SoftwareOutputDevice>(

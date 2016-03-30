@@ -56,7 +56,9 @@ class ExtensionOptionsGuest
       const std::string& frame_name,
       const GURL& target_url,
       const std::string& partition_id,
-      content::SessionStorageNamespace* session_storage_namespace) final;
+      content::SessionStorageNamespace* session_storage_namespace,
+      content::WebContentsView** view,
+      content::RenderViewHostDelegateView** delegate_view) final;
 
   // content::WebContentsObserver implementation.
   void DidNavigateMainFrame(const content::LoadCommittedDetails& details,

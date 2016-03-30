@@ -59,6 +59,7 @@
 #include "net/base/net_export.h"
 #include "net/base/sdch_manager.h"
 
+class CefNetworkDelegate;
 class GURL;
 
 namespace net {
@@ -234,6 +235,7 @@ class NET_EXPORT_PRIVATE Filter {
   std::string OrderedFilterList() const;
 
  protected:
+  friend class ::CefNetworkDelegate;
   friend class BrotliUnitTest;
   friend class GZipUnitTest;
   friend class SdchFilterChainingTest;

@@ -31,6 +31,30 @@ views::X11DesktopHandler* g_handler = NULL;
 
 namespace views {
 
+namespace {
+
+bool IsParentOfWindow(XDisplay* xdisplay,
+                      ::Window potential_parent,
+                      ::Window window) {
+  ::Window parent_win, root_win;
+  Window* child_windows;
+  unsigned int num_child_windows;
+  while (window) {
+    if (!XQueryTree(xdisplay, window, &root_win, &parent_win,
+                    &child_windows, &num_child_windows)) {
+      break;
+    }
+    if(child_windows)
+      XFree(child_windows);
+    if (parent_win == potential_parent)
+      return true;
+    window = parent_win;
+  }
+  return false;
+}
+
+}  // namespace
+
 // static
 X11DesktopHandler* X11DesktopHandler::get() {
   if (!g_handler)
@@ -86,7 +110,11 @@ void X11DesktopHandler::ActivateWindow(::Window window) {
     // in an active X window.
   }
 
-  if (wm_supports_active_window_) {
+  DesktopWindowTreeHostX11* host =
+      DesktopWindowTreeHostX11::GetHostForXID(window);
+  const bool has_external_parent = host && host->has_external_parent();
+
+  if (wm_supports_active_window_ && !has_external_parent) {
     DCHECK_EQ(gfx::GetXDisplay(), xdisplay_);
 
     // If the window is not already active, send a hint to activate it
@@ -175,8 +203,10 @@ uint32_t X11DesktopHandler::DispatchEvent(const ui::PlatformEvent& event) {
         ::Window window;
         if (ui::GetXIDProperty(x_root_window_, "_NET_ACTIVE_WINDOW", &window) &&
             window) {
-          x_active_window_ = window;
-          OnActiveWindowChanged(window, ACTIVE);
+          if (!IsParentOfWindow(xdisplay_, window, current_window_)) {
+            x_active_window_ = window;
+            OnActiveWindowChanged(window, ACTIVE);
+          }
         } else {
           x_active_window_ = None;
         }

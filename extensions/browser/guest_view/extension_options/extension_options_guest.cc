@@ -202,7 +202,9 @@ bool ExtensionOptionsGuest::ShouldCreateWebContents(
     const std::string& frame_name,
     const GURL& target_url,
     const std::string& partition_id,
-    content::SessionStorageNamespace* session_storage_namespace) {
+    content::SessionStorageNamespace* session_storage_namespace,
+    content::WebContentsView** view,
+    content::RenderViewHostDelegateView** delegate_view) {
   // This method handles opening links from within the guest. Since this guest
   // view is used for displaying embedded extension options, we want any
   // external links to be opened in a new tab, not in a new guest view.

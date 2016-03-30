@@ -87,6 +87,7 @@ class CONTENT_EXPORT RenderWidgetHostViewBase : public RenderWidgetHostView,
   void BeginFrameSubscription(
       scoped_ptr<RenderWidgetHostViewFrameSubscriber> subscriber) override;
   void EndFrameSubscription() override;
+  void SetHasExternalParent(bool val) override;
 
   // IPC::Listener implementation:
   bool OnMessageReceived(const IPC::Message& msg) override;
@@ -437,6 +438,10 @@ class CONTENT_EXPORT RenderWidgetHostViewBase : public RenderWidgetHostView,
   // Whether pinch-to-zoom should be enabled and pinch events forwarded to the
   // renderer.
   bool pinch_zoom_enabled_;
+
+  // True if the widget has a external parent view/window outside of the
+  // Chromium-controlled view/window hierarchy.
+  bool has_external_parent_;
 
  private:
   void FlushInput();

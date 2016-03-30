@@ -6,10 +6,11 @@
 #define EXTENSIONS_BROWSER_GUEST_VIEW_MIME_HANDLER_VIEW_MIME_HANDLER_VIEW_GUEST_DELEGATE_H_
 
 #include "base/macros.h"
+#include "content/public/browser/web_contents.h"
 
 namespace content {
-class WebContents;
 struct ContextMenuParams;
+class RenderWidgetHost;
 }  // namespace content
 
 namespace extensions {
@@ -21,6 +22,21 @@ class MimeHandlerViewGuestDelegate {
  public:
   MimeHandlerViewGuestDelegate() {}
   virtual ~MimeHandlerViewGuestDelegate() {}
+  
+  // Provides an opportunity to supply a custom view implementation.
+  virtual void OverrideWebContentsCreateParams(
+      content::WebContents::CreateParams* params) {}
+
+  // Called when a guest is attached or detached.
+  virtual bool OnGuestAttached(content::WebContentsView* guest_view,
+                               content::WebContentsView* parent_view);
+  virtual bool OnGuestDetached(content::WebContentsView* guest_view,
+                               content::WebContentsView* parent_view);
+
+  // Called to create the view for the widget.
+  virtual bool CreateViewForWidget(
+      content::WebContentsView* guest_view,
+      content::RenderWidgetHost* render_widget_host);
 
   // Handles context menu, or returns false if unhandled.
   virtual bool HandleContextMenu(content::WebContents* web_contents,

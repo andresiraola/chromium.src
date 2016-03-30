@@ -123,7 +123,9 @@ class WEBVIEW_EXPORT WebDialogView : public views::ClientView,
       const std::string& frame_name,
       const GURL& target_url,
       const std::string& partition_id,
-      content::SessionStorageNamespace* session_storage_namespace) override;
+      content::SessionStorageNamespace* session_storage_namespace,
+      content::WebContentsView** view,
+      content::RenderViewHostDelegateView** delegate_view) override;
 
  private:
   FRIEND_TEST_ALL_PREFIXES(WebDialogBrowserTest, WebContentRendered);

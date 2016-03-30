@@ -218,6 +218,9 @@ void RenderWidgetHostViewGuest::Destroy() {
 }
 
 gfx::Size RenderWidgetHostViewGuest::GetPhysicalBackingSize() const {
+  RenderWidgetHostViewBase* rwhv = GetOwnerRenderWidgetHostView();
+  if (rwhv)
+    return rwhv->GetPhysicalBackingSize();
   return RenderWidgetHostViewBase::GetPhysicalBackingSize();
 }
 

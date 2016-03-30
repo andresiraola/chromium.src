@@ -126,6 +126,7 @@ Widget::InitParams::InitParams()
       use_system_default_icon(false),
       show_state(ui::SHOW_STATE_DEFAULT),
       parent(nullptr),
+      parent_widget(gfx::kNullAcceleratedWidget),
       native_widget(nullptr),
       native_theme(nullptr),
       desktop_window_tree_host(nullptr),
@@ -151,6 +152,7 @@ Widget::InitParams::InitParams(Type type)
       use_system_default_icon(false),
       show_state(ui::SHOW_STATE_DEFAULT),
       parent(nullptr),
+      parent_widget(gfx::kNullAcceleratedWidget),
       native_widget(nullptr),
       native_theme(nullptr),
       desktop_window_tree_host(nullptr),
@@ -328,7 +330,7 @@ void Widget::Init(const InitParams& in_params) {
   InitParams params = in_params;
 
   params.child |= (params.type == InitParams::TYPE_CONTROL);
-  is_top_level_ = !params.child;
+  is_top_level_ = !params.child || params.parent_widget;
 
   if (params.opacity == views::Widget::InitParams::INFER_OPACITY &&
       params.type != views::Widget::InitParams::TYPE_WINDOW &&
@@ -391,7 +393,12 @@ void Widget::Init(const InitParams& in_params) {
       Minimize();
   } else if (params.delegate) {
     SetContentsView(params.delegate->GetContentsView());
-    SetInitialBoundsForFramelessWindow(params.bounds);
+    if (params.parent_widget) {
+      // Set the bounds directly instead of applying an inset.
+      SetBounds(params.bounds);
+    } else {
+      SetInitialBoundsForFramelessWindow(params.bounds);
+    }
   }
   // This must come after SetContentsView() or it might not be able to find
   // the correct NativeTheme (on Linux). See http://crbug.com/384492

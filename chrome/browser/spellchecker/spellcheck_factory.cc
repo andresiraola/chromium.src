@@ -16,6 +16,13 @@
 #include "content/public/browser/render_process_host.h"
 #include "ui/base/l10n/l10n_util.h"
 
+namespace {
+
+static base::LazyInstance<SpellcheckServiceFactory>::Leaky
+    g_spellcheck_service_factory = LAZY_INSTANCE_INITIALIZER;
+
+}  // namespace
+
 // static
 SpellcheckService* SpellcheckServiceFactory::GetForContext(
     content::BrowserContext* context) {
@@ -38,7 +45,7 @@ SpellcheckService* SpellcheckServiceFactory::GetForRenderProcessId(
 
 // static
 SpellcheckServiceFactory* SpellcheckServiceFactory::GetInstance() {
-  return base::Singleton<SpellcheckServiceFactory>::get();
+  return g_spellcheck_service_factory.Pointer();
 }
 
 SpellcheckServiceFactory::SpellcheckServiceFactory()

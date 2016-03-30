@@ -395,7 +395,8 @@ public:
 
     // Returns true if popup menus should be rendered by the browser, false if
     // they should be rendered by WebKit (which is the default).
-    static bool useExternalPopupMenus();
+    void setUseExternalPopupMenusThisInstance(bool);
+    bool useExternalPopupMenus();
 
     bool shouldAutoResize() const
     {
@@ -691,6 +692,8 @@ private:
     IntPoint m_fakePageScaleAnimationTargetPosition;
     float m_fakePageScaleAnimationPageScaleFactor;
     bool m_fakePageScaleAnimationUseAnchor;
+
+    bool m_shouldUseExternalPopupMenus;
 
     bool m_doingDragAndDrop;
 

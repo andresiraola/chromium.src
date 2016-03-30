@@ -121,8 +121,15 @@ bool CheckPepperFlashManifest(const base::DictionaryValue& manifest,
 
   std::string arch;
   manifest.GetStringASCII("x-ppapi-arch", &arch);
+#if defined(OS_MACOSX)
+  // On Mac newer versions of the plugin are a universal binary and use "mac"
+  // as the value.
+  if (arch != kPepperFlashArch && arch != kPepperFlashOperatingSystem)
+    return false;
+#else
   if (arch != kPepperFlashArch)
     return false;
+#endif
 
   *version_out = version;
   return true;

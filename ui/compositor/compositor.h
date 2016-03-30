@@ -17,6 +17,7 @@
 #include "base/single_thread_task_runner.h"
 #include "base/time/time.h"
 #include "cc/output/begin_frame_args.h"
+#include "cc/output/software_output_device.h"
 #include "cc/surfaces/surface_sequence.h"
 #include "cc/trees/layer_tree_host_client.h"
 #include "cc/trees/layer_tree_host_single_thread_client.h"
@@ -152,6 +153,17 @@ class COMPOSITOR_EXPORT CompositorBeginFrameObserver {
   virtual void OnSendBeginFrame(const cc::BeginFrameArgs& args) = 0;
 };
 
+class COMPOSITOR_EXPORT CompositorDelegate {
+ public:
+  virtual scoped_ptr<cc::SoftwareOutputDevice> CreateSoftwareOutputDevice(
+      ui::Compositor* compositor) {
+    return scoped_ptr<cc::SoftwareOutputDevice>();
+  }
+
+ protected:
+  virtual ~CompositorDelegate() {}
+};
+
 // Compositor object to take care of GPU painting.
 // A Browser compositor object is responsible for generating the final
 // displayable form of pixels comprising a single widget's contents. It draws an
@@ -171,6 +183,9 @@ class COMPOSITOR_EXPORT Compositor
 
   // Schedules a redraw of the layer tree associated with this compositor.
   void ScheduleDraw();
+
+  CompositorDelegate* delegate() const { return delegate_; }
+  void SetDelegate(CompositorDelegate* delegate) { delegate_ = delegate; }
 
   // Sets the root of the layer tree drawn by this Compositor. The root layer
   // must have no parent. The compositor's root layer is reset if the root layer
@@ -343,6 +358,8 @@ class COMPOSITOR_EXPORT Compositor
   gfx::Size size_;
 
   ui::ContextFactory* context_factory_;
+
+  CompositorDelegate* delegate_ = nullptr;
 
   // The root of the Layer tree drawn by this compositor.
   Layer* root_layer_;

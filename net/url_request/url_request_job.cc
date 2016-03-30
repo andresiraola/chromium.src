@@ -447,6 +447,9 @@ void URLRequestJob::NotifyHeadersComplete() {
   if (request_->status().is_success())
     filter_.reset(SetupFilter());
 
+  if (network_delegate_)
+    filter_.reset(network_delegate_->SetupFilter(request_, filter_.release()));
+
   if (!filter_.get()) {
     std::string content_length;
     request_->GetResponseHeaderByName("content-length", &content_length);

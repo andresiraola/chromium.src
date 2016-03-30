@@ -84,6 +84,7 @@ DesktopWindowTreeHostWin::DesktopWindowTreeHostWin(
       should_animate_window_close_(false),
       pending_close_(false),
       has_non_client_view_(false),
+      has_external_parent_(false),
       tooltip_(NULL) {
 }
 
@@ -133,8 +134,12 @@ void DesktopWindowTreeHostWin::Init(aura::Window* content_window,
                         native_widget_delegate_);
 
   HWND parent_hwnd = NULL;
-  if (params.parent && params.parent->GetHost())
+  if (params.parent_widget) {
+    parent_hwnd = params.parent_widget;
+    has_external_parent_ = true;
+  } else if (params.parent && params.parent->GetHost()) {
     parent_hwnd = params.parent->GetHost()->GetAcceleratedWidget();
+  }
 
   message_handler_->set_remove_standard_frame(params.remove_standard_frame);
 
@@ -799,11 +804,15 @@ void DesktopWindowTreeHostWin::HandleFrameChanged() {
 }
 
 void DesktopWindowTreeHostWin::HandleNativeFocus(HWND last_focused_window) {
-  // TODO(beng): inform the native_widget_delegate_.
+  // See comments in CefBrowserHostImpl::PlatformSetFocus.
+  if (has_external_parent_ && CanActivate())
+    HandleActivationChanged(true);
 }
 
 void DesktopWindowTreeHostWin::HandleNativeBlur(HWND focused_window) {
-  // TODO(beng): inform the native_widget_delegate_.
+  // See comments in CefBrowserHostImpl::PlatformSetFocus.
+  if (has_external_parent_ && CanActivate())
+    HandleActivationChanged(false);
 }
 
 bool DesktopWindowTreeHostWin::HandleMouseEvent(const ui::MouseEvent& event) {

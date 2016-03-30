@@ -6,6 +6,24 @@
 
 namespace extensions {
 
+bool MimeHandlerViewGuestDelegate::OnGuestAttached(
+    content::WebContentsView* guest_view,
+    content::WebContentsView* parent_view) {
+  return false;
+}
+
+bool MimeHandlerViewGuestDelegate::OnGuestDetached(
+    content::WebContentsView* guest_view,
+    content::WebContentsView* parent_view) {
+  return false;
+}
+
+bool MimeHandlerViewGuestDelegate::CreateViewForWidget(
+    content::WebContentsView* guest_view,
+    content::RenderWidgetHost* render_widget_host) {
+  return false;
+}
+
 bool MimeHandlerViewGuestDelegate::HandleContextMenu(
     content::WebContents* web_contents,
     const content::ContextMenuParams& params) {

@@ -19,6 +19,10 @@ namespace content {
 
 StreamContext::StreamContext() {}
 
+const void* StreamContext::GetUserDataKey() {
+  return kStreamContextKeyName;
+}
+
 StreamContext* StreamContext::GetFor(BrowserContext* context) {
   if (!context->GetUserData(kStreamContextKeyName)) {
     scoped_refptr<StreamContext> stream = new StreamContext();

@@ -173,6 +173,7 @@ struct CONTENT_EXPORT WebPreferences {
   int pinch_overlay_scrollbar_thickness;
   bool use_solid_color_scrollbars;
   bool navigate_on_drag_drop;
+  uint32_t base_background_color;
   V8CacheOptions v8_cache_options;
   bool inert_visual_viewport;
 

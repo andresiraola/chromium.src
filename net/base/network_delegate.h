@@ -35,6 +35,7 @@ namespace net {
 // of net/base here, because we have a net_base library. Forward declarations
 // are ok.
 class CookieOptions;
+class Filter;
 class HttpRequestHeaders;
 class HttpResponseHeaders;
 class ProxyInfo;
@@ -118,6 +119,13 @@ class NET_EXPORT NetworkDelegate : public base::NonThreadSafe {
       const URLRequest& request,
       const GURL& target_url,
       const GURL& referrer_url) const;
+
+  // Optionally add a new filter to the filter list. Returns the first filter in
+  // the list.
+  virtual Filter* SetupFilter(URLRequest* request,
+                              Filter* filter_list) {
+    return filter_list;
+  }
 
  private:
   // This is the interface for subclasses of NetworkDelegate to implement. These

@@ -408,6 +408,7 @@ public:
 
     // Sets whether select popup menus should be rendered by the browser.
     BLINK_EXPORT static void setUseExternalPopupMenus(bool);
+    virtual void setUseExternalPopupMenusThisInstance(bool) = 0;
 
     // Hides any popup (suggestions, selects...) that might be showing.
     virtual void hidePopups() = 0;

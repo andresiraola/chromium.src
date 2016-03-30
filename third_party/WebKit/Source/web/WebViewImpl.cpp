@@ -476,6 +476,7 @@ WebViewImpl::WebViewImpl(WebViewClient* client)
     , m_enableFakePageScaleAnimationForTesting(false)
     , m_fakePageScaleAnimationPageScaleFactor(0)
     , m_fakePageScaleAnimationUseAnchor(false)
+    , m_shouldUseExternalPopupMenus(shouldUseExternalPopupMenus)
     , m_doingDragAndDrop(false)
     , m_ignoreInputEvents(false)
     , m_compositorDeviceScaleFactorOverride(0)
@@ -4141,9 +4142,14 @@ void WebViewImpl::pageScaleFactorChanged()
     m_client->pageScaleFactorChanged();
 }
 
+void WebViewImpl::setUseExternalPopupMenusThisInstance(bool useExternalPopupMenus)
+{
+    m_shouldUseExternalPopupMenus = useExternalPopupMenus;
+}
+
 bool WebViewImpl::useExternalPopupMenus()
 {
-    return shouldUseExternalPopupMenus;
+    return m_shouldUseExternalPopupMenus;
 }
 
 void WebViewImpl::startDragging(LocalFrame* frame,

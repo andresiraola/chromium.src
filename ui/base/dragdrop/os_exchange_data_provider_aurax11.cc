@@ -159,7 +159,8 @@ void OSExchangeDataProviderAuraX11::SetURL(const GURL& url,
     format_map_.Insert(atom_cache_.GetAtom(kMimeTypeMozillaURL), mem);
 
     // Set a string fallback as well.
-    SetString(spec);
+    if (!HasString())
+      SetString(spec);
 
     // Return early if this drag already contains file contents (this implies
     // that file contents must be populated before URLs). Nautilus (and possibly

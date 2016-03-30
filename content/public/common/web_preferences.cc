@@ -172,6 +172,7 @@ WebPreferences::WebPreferences()
       pinch_overlay_scrollbar_thickness(0),
       use_solid_color_scrollbars(false),
       navigate_on_drag_drop(true),
+      base_background_color(0xFFFFFFFF),  // Color::white
       v8_cache_options(V8_CACHE_OPTIONS_DEFAULT),
       inert_visual_viewport(false),
       cookie_enabled(true),

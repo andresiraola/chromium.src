@@ -25,6 +25,8 @@
 
 #include "bindings/core/v8/V8Initializer.h"
 
+#include "third_party/node/src/node_webkit.h"
+
 #include "bindings/core/v8/DOMWrapperWorld.h"
 #include "bindings/core/v8/RejectedPromises.h"
 #include "bindings/core/v8/RetainedDOMInfo.h"
@@ -64,6 +66,8 @@
 #include "wtf/text/WTFString.h"
 #include <v8-debug.h>
 #include <v8-profiler.h>
+
+VoidHookFn g_promise_reject_callback_fn = nullptr;
 
 namespace blink {
 

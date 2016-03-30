@@ -75,6 +75,15 @@ class MimeHandlerViewGuest :
   bool ShouldHandleFindRequestsForEmbedder() const final;
   bool ZoomPropagatesFromEmbedderToGuest() const final;
 
+  // content::BrowserPluginGuestDelegate implementation
+  void OnGuestAttached(content::WebContentsView* guest_view,
+                       content::WebContentsView* parent_view) override;
+  void OnGuestDetached(content::WebContentsView* guest_view,
+                       content::WebContentsView* parent_view) override;
+  void CreateViewForWidget(
+      content::WebContentsView* guest_view,
+      content::RenderWidgetHost* render_widget_host) override;
+
   // WebContentsDelegate implementation.
   content::WebContents* OpenURLFromTab(
       content::WebContents* source,

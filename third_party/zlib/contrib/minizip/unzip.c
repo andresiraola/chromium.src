@@ -69,7 +69,7 @@
 #include <string.h>
 
 #ifndef NOUNCRYPT
-        #define NOUNCRYPT
+//        #define NOUNCRYPT
 #endif
 
 #include "third_party/zlib/zlib.h"

@@ -54,9 +54,11 @@ class PageState;
 class RenderFrameHost;
 class RenderProcessHost;
 class RenderViewHost;
+class RenderViewHostDelegateView;
 class RenderWidgetHostView;
 class SiteInstance;
 class WebContentsDelegate;
+class WebContentsView;
 struct CustomContextMenuContext;
 struct DropData;
 struct Manifest;
@@ -146,6 +148,10 @@ class WebContents : public PageNavigator,
     // RenderFrame, have already been created on the renderer side, and
     // WebContents construction should take this into account.
     bool renderer_initiated_creation;
+
+    // Optionally specify the view and delegate view.
+    content::WebContentsView* view;
+    content::RenderViewHostDelegateView* delegate_view;
   };
 
   // Creates a new WebContents.

@@ -146,6 +146,10 @@ class CONTENT_EXPORT RenderWidgetHostView {
   // deleted after this call.
   virtual void EndFrameSubscription() = 0;
 
+  // Set whether the widget has a external parent view/window outside of the
+  // Chromium-controlled view/window hierarchy.
+  virtual void SetHasExternalParent(bool val) = 0;
+
 #if defined(OS_MACOSX)
   // Set the view's active state (i.e., tint state of controls).
   virtual void SetActive(bool active) = 0;

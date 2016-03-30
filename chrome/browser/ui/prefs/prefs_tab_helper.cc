@@ -12,7 +12,7 @@
 
 #include "base/command_line.h"
 #include "base/macros.h"
-#include "base/memory/singleton.h"
+#include "base/lazy_instance.h"
 #include "base/metrics/field_trial.h"
 #include "base/prefs/overlay_user_pref_store.h"
 #include "base/prefs/pref_change_registrar.h"
@@ -431,12 +431,10 @@ class PrefWatcherFactory : public BrowserContextKeyedServiceFactory {
         GetInstance()->GetServiceForBrowserContext(profile, true));
   }
 
-  static PrefWatcherFactory* GetInstance() {
-    return base::Singleton<PrefWatcherFactory>::get();
-  }
+  static PrefWatcherFactory* GetInstance();
 
  private:
-  friend struct base::DefaultSingletonTraits<PrefWatcherFactory>;
+  friend struct base::DefaultLazyInstanceTraits<PrefWatcherFactory>;
 
   PrefWatcherFactory() : BrowserContextKeyedServiceFactory(
       "PrefWatcher",
@@ -456,6 +454,18 @@ class PrefWatcherFactory : public BrowserContextKeyedServiceFactory {
     return chrome::GetBrowserContextOwnInstanceInIncognito(context);
   }
 };
+
+namespace {
+
+base::LazyInstance<PrefWatcherFactory>::Leaky g_pref_watcher_factory =
+    LAZY_INSTANCE_INITIALIZER;
+
+}  // namespace
+
+// static
+PrefWatcherFactory* PrefWatcherFactory::GetInstance() {
+  return g_pref_watcher_factory.Pointer();
+}
 
 // static
 PrefWatcher* PrefWatcher::Get(Profile* profile) {

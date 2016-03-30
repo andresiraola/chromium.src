@@ -80,7 +80,7 @@ EVENTS_X_EXPORT bool GetFlingDataFromXEvent(const XEvent& xev,
                                             float* vy_ordinal,
                                             bool* is_cancel);
 
-EVENTS_X_EXPORT void ResetTimestampRolloverCountersForTesting();
+void ResetTimestampRolloverCountersForTesting();
 
 }  // namespace ui
 

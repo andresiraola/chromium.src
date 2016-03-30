@@ -21,6 +21,8 @@ class Size;
 namespace content {
 
 class GuestHost;
+class RenderWidgetHost;
+class WebContentsView;
 
 // Objects implement this interface to get notified about changes in the guest
 // WebContents and to provide necessary functionality.
@@ -86,6 +88,17 @@ class CONTENT_EXPORT BrowserPluginGuestDelegate {
   // Provides the delegate with an interface with which to communicate with the
   // content module.
   virtual void SetGuestHost(GuestHost* guest_host) {}
+
+  // Called when a guest is attached or detached.
+  virtual void OnGuestAttached(content::WebContentsView* guest_view,
+                               content::WebContentsView* parent_view);
+  virtual void OnGuestDetached(content::WebContentsView* guest_view,
+                               content::WebContentsView* parent_view);
+
+  // Called to create the view for the widget.
+  virtual void CreateViewForWidget(
+      content::WebContentsView* guest_view,
+      content::RenderWidgetHost* render_widget_host);
 
   // Sets the position of the context menu for the guest contents. The value
   // reported from the guest renderer should be ignored. The reported value

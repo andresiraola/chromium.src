@@ -4,6 +4,8 @@
 
 #include "content/public/browser/browser_plugin_guest_delegate.h"
 
+#include "content/browser/web_contents/web_contents_view_guest.h"
+
 namespace content {
 
 bool BrowserPluginGuestDelegate::CanRunInDetachedState() const {
@@ -30,6 +32,25 @@ bool BrowserPluginGuestDelegate::HandleFindForEmbedder(
 bool BrowserPluginGuestDelegate::HandleStopFindingForEmbedder(
     StopFindAction action) {
   return false;
+}
+
+void BrowserPluginGuestDelegate::OnGuestAttached(
+    content::WebContentsView* guest_view,
+    content::WebContentsView* parent_view) {
+  static_cast<WebContentsViewGuest*>(guest_view)->OnGuestAttached(parent_view);
+}
+
+void BrowserPluginGuestDelegate::OnGuestDetached(
+    content::WebContentsView* guest_view,
+    content::WebContentsView* parent_view) {
+  static_cast<WebContentsViewGuest*>(guest_view)->OnGuestAttached(parent_view);
+}
+
+void BrowserPluginGuestDelegate::CreateViewForWidget(
+    content::WebContentsView* guest_view,
+    content::RenderWidgetHost* render_widget_host) {
+  static_cast<WebContentsViewGuest*>(guest_view)->CreateViewForWidget(
+      render_widget_host, true);
 }
 
 }  // namespace content

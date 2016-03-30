@@ -134,6 +134,8 @@ void MimeHandlerViewGuest::CreateWebContents(
   WebContents::CreateParams params(browser_context(),
                                    guest_site_instance.get());
   params.guest_delegate = this;
+  if (delegate_)
+    delegate_->OverrideWebContentsCreateParams(&params);
   callback.Run(WebContents::Create(params));
 }
 
@@ -156,6 +158,30 @@ bool MimeHandlerViewGuest::ShouldHandleFindRequestsForEmbedder() const {
 
 bool MimeHandlerViewGuest::ZoomPropagatesFromEmbedderToGuest() const {
   return false;
+}
+
+void MimeHandlerViewGuest::OnGuestAttached(
+    content::WebContentsView* guest_view,
+    content::WebContentsView* parent_view) {
+  if (!delegate_ || !delegate_->OnGuestAttached(guest_view, parent_view))
+    BrowserPluginGuestDelegate::OnGuestAttached(guest_view, parent_view);
+}
+
+void MimeHandlerViewGuest::OnGuestDetached(
+    content::WebContentsView* guest_view,
+    content::WebContentsView* parent_view) {
+  if (!delegate_ || !delegate_->OnGuestDetached(guest_view, parent_view))
+    BrowserPluginGuestDelegate::OnGuestDetached(guest_view, parent_view);
+}
+
+void MimeHandlerViewGuest::CreateViewForWidget(
+    content::WebContentsView* guest_view,
+    content::RenderWidgetHost* render_widget_host) {
+  if (!delegate_ ||
+      !delegate_->CreateViewForWidget(guest_view, render_widget_host)) {
+    BrowserPluginGuestDelegate::CreateViewForWidget(guest_view,
+                                                    render_widget_host);
+  }
 }
 
 WebContents* MimeHandlerViewGuest::OpenURLFromTab(

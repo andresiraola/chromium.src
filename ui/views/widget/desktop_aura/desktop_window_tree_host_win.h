@@ -244,6 +244,10 @@ class VIEWS_EXPORT DesktopWindowTreeHostWin
   // Init time, before the Widget has created the NonClientView.
   bool has_non_client_view_;
 
+  // True if the widget has a external parent view/window outside of the
+  // Chromium-controlled view/window hierarchy.
+  bool has_external_parent_;
+
   // Owned by TooltipController, but we need to forward events to it so we keep
   // a reference.
   corewm::TooltipWin* tooltip_;

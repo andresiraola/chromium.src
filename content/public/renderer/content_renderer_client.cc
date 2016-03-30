@@ -98,7 +98,6 @@ bool ContentRendererClient::AllowPopup() {
   return false;
 }
 
-#ifdef OS_ANDROID
 bool ContentRendererClient::HandleNavigation(
     RenderFrame* render_frame,
     bool is_content_initiated,
@@ -110,7 +109,6 @@ bool ContentRendererClient::HandleNavigation(
     bool is_redirect) {
   return false;
 }
-#endif
 
 bool ContentRendererClient::ShouldFork(blink::WebLocalFrame* frame,
                                        const GURL& url,

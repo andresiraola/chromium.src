@@ -87,6 +87,12 @@ class VIEWS_EXPORT DesktopWindowTreeHostX11
   // internal list of open windows.
   static void CleanUpWindowList(void (*func)(aura::Window* window));
 
+  void set_screen_bounds(const gfx::Rect& bounds) { screen_bounds_ = bounds; }
+
+  // Returns true if the widget has a external parent view/window outside of the
+  // Chromium-controlled view/window hierarchy.
+  bool has_external_parent() const { return has_external_parent_; }
+
  protected:
   // Overridden from DesktopWindowTreeHost:
   void Init(aura::Window* content_window,
@@ -263,6 +269,9 @@ class VIEWS_EXPORT DesktopWindowTreeHostX11
   // The bounds of |xwindow_|.
   gfx::Rect bounds_in_pixels_;
 
+  // Override the screen bounds when the host is a child window.
+  gfx::Rect screen_bounds_;
+
   // Whenever the bounds are set, we keep the previous set of bounds around so
   // we can have a better chance of getting the real
   // |restored_bounds_in_pixels_|. Window managers tend to send a Configure
@@ -298,6 +307,10 @@ class VIEWS_EXPORT DesktopWindowTreeHostX11
 
   // Whether we used an ARGB visual for our window.
   bool use_argb_visual_;
+
+  // True if the widget has a external parent view/window outside of the
+  // Chromium-controlled view/window hierarchy.
+  bool has_external_parent_;
 
   DesktopDragDropClientAuraX11* drag_drop_client_;
 
@@ -350,6 +363,9 @@ class VIEWS_EXPORT DesktopWindowTreeHostX11
   base::CancelableCallback<void()> delayed_resize_task_;
 
   base::WeakPtrFactory<DesktopWindowTreeHostX11> close_widget_factory_;
+
+  // True if the xwindow has already been destroyed.
+  bool xwindow_destroyed_;
 
   DISALLOW_COPY_AND_ASSIGN(DesktopWindowTreeHostX11);
 };

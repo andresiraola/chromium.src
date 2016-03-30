@@ -341,7 +341,9 @@ bool WebDialogView::ShouldCreateWebContents(
     const std::string& frame_name,
     const GURL& target_url,
     const std::string& partition_id,
-    content::SessionStorageNamespace* session_storage_namespace) {
+    content::SessionStorageNamespace* session_storage_namespace,
+    content::WebContentsView** view,
+    content::RenderViewHostDelegateView** delegate_view) {
   if (delegate_)
     return delegate_->HandleShouldCreateWebContents();
   return true;

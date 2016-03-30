@@ -144,7 +144,9 @@ bool WebContentsDelegate::ShouldCreateWebContents(
     const std::string& frame_name,
     const GURL& target_url,
     const std::string& partition_id,
-    SessionStorageNamespace* session_storage_namespace) {
+    SessionStorageNamespace* session_storage_namespace,
+    content::WebContentsView** view,
+    content::RenderViewHostDelegateView** delegate_view) {
   return true;
 }
 

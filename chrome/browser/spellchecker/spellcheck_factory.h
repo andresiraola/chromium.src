@@ -7,7 +7,7 @@
 
 #include "base/gtest_prod_util.h"
 #include "base/macros.h"
-#include "base/memory/singleton.h"
+#include "base/lazy_instance.h"
 #include "components/keyed_service/content/browser_context_keyed_service_factory.h"
 
 class SpellcheckService;
@@ -26,7 +26,7 @@ class SpellcheckServiceFactory : public BrowserContextKeyedServiceFactory {
   static SpellcheckServiceFactory* GetInstance();
 
  private:
-  friend struct base::DefaultSingletonTraits<SpellcheckServiceFactory>;
+  friend struct base::DefaultLazyInstanceTraits<SpellcheckServiceFactory>;
 
   SpellcheckServiceFactory();
   ~SpellcheckServiceFactory() override;

@@ -1708,7 +1708,9 @@ bool Browser::ShouldCreateWebContents(
     const std::string& frame_name,
     const GURL& target_url,
     const std::string& partition_id,
-    content::SessionStorageNamespace* session_storage_namespace) {
+    content::SessionStorageNamespace* session_storage_namespace,
+    content::WebContentsView** view,
+    content::RenderViewHostDelegateView** delegate_view) {
   if (window_container_type == WINDOW_CONTAINER_TYPE_BACKGROUND) {
     // If a BackgroundContents is created, suppress the normal WebContents.
     return !MaybeCreateBackgroundContents(

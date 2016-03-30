@@ -27,7 +27,7 @@
 #include "content/browser/renderer_host/render_widget_host_impl.h"
 #include "content/browser/renderer_host/render_widget_host_view_base.h"
 #include "content/browser/web_contents/web_contents_impl.h"
-#include "content/browser/web_contents/web_contents_view_guest.h"
+#include "content/browser/web_contents/web_contents_view.h"
 #include "content/common/browser_plugin/browser_plugin_constants.h"
 #include "content/common/browser_plugin/browser_plugin_messages.h"
 #include "content/common/content_constants_internal.h"
@@ -294,20 +294,19 @@ void BrowserPluginGuest::InitInternal(
   guest_window_rect_ = params.view_rect;
 
   if (owner_web_contents_ != owner_web_contents) {
-    WebContentsViewGuest* new_view = nullptr;
+    WebContentsView* new_view = nullptr;
     if (!BrowserPluginGuestMode::UseCrossProcessFramesForGuests()) {
-      new_view =
-          static_cast<WebContentsViewGuest*>(GetWebContents()->GetView());
+      new_view = GetWebContents()->GetView();
     }
 
     if (owner_web_contents_ && new_view)
-      new_view->OnGuestDetached(owner_web_contents_->GetView());
+      delegate_->OnGuestDetached(new_view, owner_web_contents_->GetView());
 
     // Once a BrowserPluginGuest has an embedder WebContents, it's considered to
     // be attached.
     owner_web_contents_ = owner_web_contents;
     if (new_view)
-      new_view->OnGuestAttached(owner_web_contents_->GetView());
+      delegate_->OnGuestAttached(new_view, owner_web_contents_->GetView());
   }
 
   RendererPreferences* renderer_prefs =
@@ -791,11 +790,10 @@ void BrowserPluginGuest::OnWillAttachComplete(
     static_cast<RenderViewHostImpl*>(GetWebContents()->GetRenderViewHost())
         ->GetWidget()
         ->Init();
-    WebContentsViewGuest* web_contents_view =
-        static_cast<WebContentsViewGuest*>(GetWebContents()->GetView());
     if (!web_contents()->GetRenderViewHost()->GetWidget()->GetView()) {
-      web_contents_view->CreateViewForWidget(
-          web_contents()->GetRenderViewHost()->GetWidget(), true);
+      delegate_->CreateViewForWidget(
+          GetWebContents()->GetView(),
+          web_contents()->GetRenderViewHost()->GetWidget());
     }
   }
 

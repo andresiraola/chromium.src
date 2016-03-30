@@ -375,6 +375,7 @@ RenderWidgetHostViewBase::RenderWidgetHostViewBase()
       current_device_scale_factor_(0),
       current_display_rotation_(gfx::Display::ROTATE_0),
       pinch_zoom_enabled_(content::IsPinchToZoomEnabled()),
+      has_external_parent_(false),
       renderer_frame_number_(0),
       weak_factory_(this) {
 }
@@ -567,6 +568,10 @@ void RenderWidgetHostViewBase::BeginFrameSubscription(
 
 void RenderWidgetHostViewBase::EndFrameSubscription() {
   NOTREACHED();
+}
+
+void RenderWidgetHostViewBase::SetHasExternalParent(bool val) {
+  has_external_parent_ = val;
 }
 
 uint32_t RenderWidgetHostViewBase::RendererFrameNumber() {

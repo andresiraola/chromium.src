@@ -41,9 +41,11 @@ class DownloadItem;
 class JavaScriptDialogManager;
 class PageState;
 class RenderViewHost;
+class RenderViewHostDelegateView;
 class SessionStorageNamespace;
 class WebContents;
 class WebContentsImpl;
+class WebContentsView;
 struct ColorSuggestion;
 struct ContextMenuParams;
 struct DropData;
@@ -305,7 +307,9 @@ class CONTENT_EXPORT WebContentsDelegate {
       const std::string& frame_name,
       const GURL& target_url,
       const std::string& partition_id,
-      SessionStorageNamespace* session_storage_namespace);
+      SessionStorageNamespace* session_storage_namespace,
+      content::WebContentsView** view,
+      content::RenderViewHostDelegateView** delegate_view);
 
   // Notifies the delegate about the creation of a new WebContents. This
   // typically happens when popups are created.

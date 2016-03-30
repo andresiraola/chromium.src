@@ -825,7 +825,7 @@ bool ChromeClientImpl::hasOpenedPopup() const
 PassRefPtrWillBeRawPtr<PopupMenu> ChromeClientImpl::openPopupMenu(LocalFrame& frame, HTMLSelectElement& select)
 {
     notifyPopupOpeningObservers();
-    if (WebViewImpl::useExternalPopupMenus())
+    if (m_webView->useExternalPopupMenus())
         return adoptRefWillBeNoop(new ExternalPopupMenu(frame, select, *m_webView));
 
     ASSERT(RuntimeEnabledFeatures::pagePopupEnabled());
