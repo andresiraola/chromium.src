@@ -2497,4 +2497,28 @@ GLint GLES2TraceImplementation::GetFragDataIndexEXT(GLuint program,
   return gl_->GetFragDataIndexEXT(program, name);
 }
 
+GLuint GLES2TraceImplementation::CreateVRCompositorCHROMIUM() {
+  TRACE_EVENT_BINARY_EFFICIENT0("gpu",
+                                "GLES2Trace::CreateVRCompositorCHROMIUM");
+  return gl_->CreateVRCompositorCHROMIUM();
+}
+
+void GLES2TraceImplementation::SubmitVRCompositorFrameCHROMIUM(
+    GLuint compositor,
+    GLuint frameTexture,
+    GLfloat x,
+    GLfloat y,
+    GLfloat z,
+    GLfloat w) {
+  TRACE_EVENT_BINARY_EFFICIENT0("gpu",
+                                "GLES2Trace::SubmitVRCompositorFrameCHROMIUM");
+  gl_->SubmitVRCompositorFrameCHROMIUM(compositor, frameTexture, x, y, z, w);
+}
+
+void GLES2TraceImplementation::DeleteVRCompositorCHROMIUM(GLuint compositor) {
+  TRACE_EVENT_BINARY_EFFICIENT0("gpu",
+                                "GLES2Trace::DeleteVRCompositorCHROMIUM");
+  gl_->DeleteVRCompositorCHROMIUM(compositor);
+}
+
 #endif  // GPU_COMMAND_BUFFER_CLIENT_GLES2_TRACE_IMPLEMENTATION_IMPL_AUTOGEN_H_

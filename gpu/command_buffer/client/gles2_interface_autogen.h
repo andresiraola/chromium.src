@@ -887,4 +887,12 @@ virtual void BindFragDataLocationEXT(GLuint program,
                                      GLuint colorNumber,
                                      const char* name) = 0;
 virtual GLint GetFragDataIndexEXT(GLuint program, const char* name) = 0;
+virtual GLuint CreateVRCompositorCHROMIUM() = 0;
+virtual void SubmitVRCompositorFrameCHROMIUM(GLuint compositor,
+                                             GLuint frameTexture,
+                                             GLfloat x,
+                                             GLfloat y,
+                                             GLfloat z,
+                                             GLfloat w) = 0;
+virtual void DeleteVRCompositorCHROMIUM(GLuint compositor) = 0;
 #endif  // GPU_COMMAND_BUFFER_CLIENT_GLES2_INTERFACE_AUTOGEN_H_

@@ -3621,4 +3621,27 @@ void GLES2Implementation::ApplyScreenSpaceAntialiasingCHROMIUM() {
   CheckGLError();
 }
 
+void GLES2Implementation::SubmitVRCompositorFrameCHROMIUM(GLuint compositor,
+                                                          GLuint frameTexture,
+                                                          GLfloat x,
+                                                          GLfloat y,
+                                                          GLfloat z,
+                                                          GLfloat w) {
+  GPU_CLIENT_SINGLE_THREAD_CHECK();
+  GPU_CLIENT_LOG("[" << GetLogPrefix() << "] glSubmitVRCompositorFrameCHROMIUM("
+                     << compositor << ", " << frameTexture << ", " << x << ", "
+                     << y << ", " << z << ", " << w << ")");
+  helper_->SubmitVRCompositorFrameCHROMIUM(compositor, frameTexture, x, y, z,
+                                           w);
+  CheckGLError();
+}
+
+void GLES2Implementation::DeleteVRCompositorCHROMIUM(GLuint compositor) {
+  GPU_CLIENT_SINGLE_THREAD_CHECK();
+  GPU_CLIENT_LOG("[" << GetLogPrefix() << "] glDeleteVRCompositorCHROMIUM("
+                     << compositor << ")");
+  helper_->DeleteVRCompositorCHROMIUM(compositor);
+  CheckGLError();
+}
+
 #endif  // GPU_COMMAND_BUFFER_CLIENT_GLES2_IMPLEMENTATION_IMPL_AUTOGEN_H_

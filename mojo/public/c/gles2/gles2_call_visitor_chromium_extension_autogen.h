@@ -580,3 +580,17 @@ VISIT_GL_CALL(GetFragDataIndexEXT,
               GLint,
               (GLuint program, const char* name),
               (program, name))
+VISIT_GL_CALL(CreateVRCompositorCHROMIUM, GLuint, (), ())
+VISIT_GL_CALL(SubmitVRCompositorFrameCHROMIUM,
+              void,
+              (GLuint compositor,
+               GLuint frameTexture,
+               GLfloat x,
+               GLfloat y,
+               GLfloat z,
+               GLfloat w),
+              (compositor, frameTexture, x, y, z, w))
+VISIT_GL_CALL(DeleteVRCompositorCHROMIUM,
+              void,
+              (GLuint compositor),
+              (compositor))

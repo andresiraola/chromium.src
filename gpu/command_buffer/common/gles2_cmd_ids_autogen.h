@@ -335,7 +335,10 @@
   OP(ApplyScreenSpaceAntialiasingCHROMIUM)        /* 576 */ \
   OP(BindFragDataLocationIndexedEXTBucket)        /* 577 */ \
   OP(BindFragDataLocationEXTBucket)               /* 578 */ \
-  OP(GetFragDataIndexEXT)                         /* 579 */
+  OP(GetFragDataIndexEXT)                         /* 579 */ \
+  OP(CreateVRCompositorCHROMIUM)                  /* 580 */ \
+  OP(SubmitVRCompositorFrameCHROMIUM)             /* 581 */ \
+  OP(DeleteVRCompositorCHROMIUM)                  /* 582 */
 
 enum CommandId {
   kStartPoint = cmd::kLastCommonId,  // All GLES2 commands start after this.

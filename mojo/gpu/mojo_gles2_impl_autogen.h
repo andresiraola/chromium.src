@@ -889,6 +889,14 @@ class MojoGLES2Impl : public gpu::gles2::GLES2Interface {
                                GLuint colorNumber,
                                const char* name) override;
   GLint GetFragDataIndexEXT(GLuint program, const char* name) override;
+  GLuint CreateVRCompositorCHROMIUM() override;
+  void SubmitVRCompositorFrameCHROMIUM(GLuint compositor,
+                                       GLuint frameTexture,
+                                       GLfloat x,
+                                       GLfloat y,
+                                       GLfloat z,
+                                       GLfloat w) override;
+  void DeleteVRCompositorCHROMIUM(GLuint compositor) override;
 
  private:
   MojoGLES2Context context_;

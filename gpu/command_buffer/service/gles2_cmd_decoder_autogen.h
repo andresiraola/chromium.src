@@ -5013,6 +5013,44 @@ error::Error GLES2DecoderImpl::HandleApplyScreenSpaceAntialiasingCHROMIUM(
   return error::kNoError;
 }
 
+error::Error GLES2DecoderImpl::HandleCreateVRCompositorCHROMIUM(
+    uint32_t immediate_data_size,
+    const void* cmd_data) {
+  const gles2::cmds::CreateVRCompositorCHROMIUM& c =
+      *static_cast<const gles2::cmds::CreateVRCompositorCHROMIUM*>(cmd_data);
+  (void)c;
+  DoCreateVRCompositorCHROMIUM();
+  return error::kNoError;
+}
+
+error::Error GLES2DecoderImpl::HandleSubmitVRCompositorFrameCHROMIUM(
+    uint32_t immediate_data_size,
+    const void* cmd_data) {
+  const gles2::cmds::SubmitVRCompositorFrameCHROMIUM& c =
+      *static_cast<const gles2::cmds::SubmitVRCompositorFrameCHROMIUM*>(
+          cmd_data);
+  (void)c;
+  GLuint compositor = static_cast<GLuint>(c.compositor);
+  GLuint frameTexture = static_cast<GLuint>(c.frameTexture);
+  GLfloat x = static_cast<GLfloat>(c.x);
+  GLfloat y = static_cast<GLfloat>(c.y);
+  GLfloat z = static_cast<GLfloat>(c.z);
+  GLfloat w = static_cast<GLfloat>(c.w);
+  DoSubmitVRCompositorFrameCHROMIUM(compositor, frameTexture, x, y, z, w);
+  return error::kNoError;
+}
+
+error::Error GLES2DecoderImpl::HandleDeleteVRCompositorCHROMIUM(
+    uint32_t immediate_data_size,
+    const void* cmd_data) {
+  const gles2::cmds::DeleteVRCompositorCHROMIUM& c =
+      *static_cast<const gles2::cmds::DeleteVRCompositorCHROMIUM*>(cmd_data);
+  (void)c;
+  GLuint compositor = static_cast<GLuint>(c.compositor);
+  DoDeleteVRCompositorCHROMIUM(compositor);
+  return error::kNoError;
+}
+
 bool GLES2DecoderImpl::SetCapabilityState(GLenum cap, bool enabled) {
   switch (cap) {
     case GL_BLEND:

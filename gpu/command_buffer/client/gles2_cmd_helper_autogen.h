@@ -3195,4 +3195,33 @@ void GetFragDataIndexEXT(GLuint program,
   }
 }
 
+void CreateVRCompositorCHROMIUM() {
+  gles2::cmds::CreateVRCompositorCHROMIUM* c =
+      GetCmdSpace<gles2::cmds::CreateVRCompositorCHROMIUM>();
+  if (c) {
+    c->Init();
+  }
+}
+
+void SubmitVRCompositorFrameCHROMIUM(GLuint compositor,
+                                     GLuint frameTexture,
+                                     GLfloat x,
+                                     GLfloat y,
+                                     GLfloat z,
+                                     GLfloat w) {
+  gles2::cmds::SubmitVRCompositorFrameCHROMIUM* c =
+      GetCmdSpace<gles2::cmds::SubmitVRCompositorFrameCHROMIUM>();
+  if (c) {
+    c->Init(compositor, frameTexture, x, y, z, w);
+  }
+}
+
+void DeleteVRCompositorCHROMIUM(GLuint compositor) {
+  gles2::cmds::DeleteVRCompositorCHROMIUM* c =
+      GetCmdSpace<gles2::cmds::DeleteVRCompositorCHROMIUM>();
+  if (c) {
+    c->Init(compositor);
+  }
+}
+
 #endif  // GPU_COMMAND_BUFFER_CLIENT_GLES2_CMD_HELPER_AUTOGEN_H_

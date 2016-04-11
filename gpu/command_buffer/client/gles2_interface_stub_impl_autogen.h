@@ -1165,4 +1165,15 @@ GLint GLES2InterfaceStub::GetFragDataIndexEXT(GLuint /* program */,
                                               const char* /* name */) {
   return 0;
 }
+GLuint GLES2InterfaceStub::CreateVRCompositorCHROMIUM() {
+  return 0;
+}
+void GLES2InterfaceStub::SubmitVRCompositorFrameCHROMIUM(
+    GLuint /* compositor */,
+    GLuint /* frameTexture */,
+    GLfloat /* x */,
+    GLfloat /* y */,
+    GLfloat /* z */,
+    GLfloat /* w */) {}
+void GLES2InterfaceStub::DeleteVRCompositorCHROMIUM(GLuint /* compositor */) {}
 #endif  // GPU_COMMAND_BUFFER_CLIENT_GLES2_INTERFACE_STUB_IMPL_AUTOGEN_H_

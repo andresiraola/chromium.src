@@ -1189,4 +1189,15 @@ void BindFragDataLocationEXT(GLuint program,
 
 GLint GetFragDataIndexEXT(GLuint program, const char* name) override;
 
+GLuint CreateVRCompositorCHROMIUM() override;
+
+void SubmitVRCompositorFrameCHROMIUM(GLuint compositor,
+                                     GLuint frameTexture,
+                                     GLfloat x,
+                                     GLfloat y,
+                                     GLfloat z,
+                                     GLfloat w) override;
+
+void DeleteVRCompositorCHROMIUM(GLuint compositor) override;
+
 #endif  // GPU_COMMAND_BUFFER_CLIENT_GLES2_IMPLEMENTATION_AUTOGEN_H_

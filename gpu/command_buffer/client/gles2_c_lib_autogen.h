@@ -1715,6 +1715,21 @@ void GL_APIENTRY GLES2BindFragDataLocationEXT(GLuint program,
 GLint GL_APIENTRY GLES2GetFragDataIndexEXT(GLuint program, const char* name) {
   return gles2::GetGLContext()->GetFragDataIndexEXT(program, name);
 }
+GLuint GL_APIENTRY GLES2CreateVRCompositorCHROMIUM() {
+  return gles2::GetGLContext()->CreateVRCompositorCHROMIUM();
+}
+void GL_APIENTRY GLES2SubmitVRCompositorFrameCHROMIUM(GLuint compositor,
+                                                      GLuint frameTexture,
+                                                      GLfloat x,
+                                                      GLfloat y,
+                                                      GLfloat z,
+                                                      GLfloat w) {
+  gles2::GetGLContext()->SubmitVRCompositorFrameCHROMIUM(
+      compositor, frameTexture, x, y, z, w);
+}
+void GL_APIENTRY GLES2DeleteVRCompositorCHROMIUM(GLuint compositor) {
+  gles2::GetGLContext()->DeleteVRCompositorCHROMIUM(compositor);
+}
 
 namespace gles2 {
 
@@ -3019,6 +3034,19 @@ extern const NameToFunc g_gles2_function_table[] = {
     {
         "glGetFragDataIndexEXT",
         reinterpret_cast<GLES2FunctionPointer>(glGetFragDataIndexEXT),
+    },
+    {
+        "glCreateVRCompositorCHROMIUM",
+        reinterpret_cast<GLES2FunctionPointer>(glCreateVRCompositorCHROMIUM),
+    },
+    {
+        "glSubmitVRCompositorFrameCHROMIUM",
+        reinterpret_cast<GLES2FunctionPointer>(
+            glSubmitVRCompositorFrameCHROMIUM),
+    },
+    {
+        "glDeleteVRCompositorCHROMIUM",
+        reinterpret_cast<GLES2FunctionPointer>(glDeleteVRCompositorCHROMIUM),
     },
     {
         NULL, NULL,

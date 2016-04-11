@@ -380,5 +380,9 @@
   GLES2_GET_FUN(BindFragDataLocationIndexedEXT)
 #define glBindFragDataLocationEXT GLES2_GET_FUN(BindFragDataLocationEXT)
 #define glGetFragDataIndexEXT GLES2_GET_FUN(GetFragDataIndexEXT)
+#define glCreateVRCompositorCHROMIUM GLES2_GET_FUN(CreateVRCompositorCHROMIUM)
+#define glSubmitVRCompositorFrameCHROMIUM \
+  GLES2_GET_FUN(SubmitVRCompositorFrameCHROMIUM)
+#define glDeleteVRCompositorCHROMIUM GLES2_GET_FUN(DeleteVRCompositorCHROMIUM)
 
 #endif  // GPU_GLES2_GL2CHROMIUM_AUTOGEN_H_

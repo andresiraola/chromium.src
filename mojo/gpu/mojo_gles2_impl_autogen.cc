@@ -1925,5 +1925,22 @@ GLint MojoGLES2Impl::GetFragDataIndexEXT(GLuint program, const char* name) {
   MojoGLES2MakeCurrent(context_);
   return glGetFragDataIndexEXT(program, name);
 }
+GLuint MojoGLES2Impl::CreateVRCompositorCHROMIUM() {
+  MojoGLES2MakeCurrent(context_);
+  return glCreateVRCompositorCHROMIUM();
+}
+void MojoGLES2Impl::SubmitVRCompositorFrameCHROMIUM(GLuint compositor,
+                                                    GLuint frameTexture,
+                                                    GLfloat x,
+                                                    GLfloat y,
+                                                    GLfloat z,
+                                                    GLfloat w) {
+  MojoGLES2MakeCurrent(context_);
+  glSubmitVRCompositorFrameCHROMIUM(compositor, frameTexture, x, y, z, w);
+}
+void MojoGLES2Impl::DeleteVRCompositorCHROMIUM(GLuint compositor) {
+  MojoGLES2MakeCurrent(context_);
+  glDeleteVRCompositorCHROMIUM(compositor);
+}
 
 }  // namespace mojo
