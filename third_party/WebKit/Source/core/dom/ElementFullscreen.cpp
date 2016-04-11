@@ -8,14 +8,14 @@
 
 namespace blink {
 
-void ElementFullscreen::requestFullscreen(Element& element)
+void ElementFullscreen::requestFullscreen(Element& element, const FullscreenOptions& options)
 {
-    Fullscreen::from(element.document()).requestFullscreen(element, Fullscreen::UnprefixedRequest);
+    Fullscreen::from(element.document()).requestFullscreen(element, Fullscreen::UnprefixedRequest, options);
 }
 
-void ElementFullscreen::webkitRequestFullscreen(Element& element)
+void ElementFullscreen::webkitRequestFullscreen(Element& element, const FullscreenOptions& options)
 {
-    Fullscreen::from(element.document()).requestFullscreen(element, Fullscreen::PrefixedRequest);
+    Fullscreen::from(element.document()).requestFullscreen(element, Fullscreen::PrefixedRequest, options);
 }
 
 } // namespace blink

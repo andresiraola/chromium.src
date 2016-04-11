@@ -937,6 +937,15 @@ class GPU_BLINK_EXPORT WebGraphicsContext3DImpl
   void waitSync(blink::WGC3Dsync sync,
                 blink::WGC3Dbitfield flags,
                 blink::WGC3Duint64 timeout) override;
+                
+  blink::WebGLId createVRCompositorCHROMIUM() override;
+  void submitVRCompositorFrameCHROMIUM(blink::WebGLId compositor,
+                                       blink::WebGLId texture,
+                                       blink::WGC3Dfloat x,
+                                       blink::WGC3Dfloat y,
+                                       blink::WGC3Dfloat z,
+                                       blink::WGC3Dfloat w) override;
+  void deleteVRCompositorCHROMIUM(blink::WebGLId compositor) override;
 
   bool isContextLost() override;
   blink::WGC3Denum getGraphicsResetStatusARB() override;

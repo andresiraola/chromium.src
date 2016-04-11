@@ -5,13 +5,13 @@
 // https://fullscreen.spec.whatwg.org/#api
 
 partial interface Element {
-    [RuntimeEnabled=FullscreenUnprefixed] void requestFullscreen();
+    [RuntimeEnabled=FullscreenUnprefixed] void requestFullscreen(optional FullscreenOptions options);
 
     // Mozilla version
-    [LogActivity, LogAllWorlds, MeasureAs=PrefixedElementRequestFullScreen, ImplementedAs=webkitRequestFullscreen] void webkitRequestFullScreen();
+    [LogActivity, LogAllWorlds, MeasureAs=PrefixedElementRequestFullScreen, ImplementedAs=webkitRequestFullscreen] void webkitRequestFullScreen(optional FullscreenOptions options);
 
     // W3C version
-    [LogActivity, LogAllWorlds, MeasureAs=PrefixedElementRequestFullscreen] void webkitRequestFullscreen();
+    [LogActivity, LogAllWorlds, MeasureAs=PrefixedElementRequestFullscreen] void webkitRequestFullscreen(optional FullscreenOptions options);
 
     attribute EventHandler onwebkitfullscreenchange;
     attribute EventHandler onwebkitfullscreenerror;

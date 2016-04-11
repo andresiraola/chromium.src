@@ -551,6 +551,10 @@ public:
     virtual void vertexAttribI4uiv(WGC3Duint index, const WGC3Duint *v) { }
     virtual void vertexAttribIPointer(WGC3Duint index, WGC3Dint size, WGC3Denum type, WGC3Dsizei stride, WGC3Dintptr pointer) { }
     virtual void waitSync(WGC3Dsync sync, WGC3Dbitfield flags, WGC3Duint64 timeout) { }
+    
+    virtual WGC3Duint createVRCompositorCHROMIUM() { return 0; }
+    virtual void submitVRCompositorFrameCHROMIUM(WGC3Duint index, WGC3Duint texture,WGC3Dfloat x, WGC3Dfloat y, WGC3Dfloat z, WGC3Dfloat w) { }
+    virtual void deleteVRCompositorCHROMIUM(WGC3Duint index) { }
 };
 
 } // namespace blink

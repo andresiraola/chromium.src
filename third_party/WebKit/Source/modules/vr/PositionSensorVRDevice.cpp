@@ -10,28 +10,13 @@
 namespace blink {
 
 PositionSensorVRDevice::PositionSensorVRDevice(VRHardwareUnit* hardwareUnit, unsigned deviceId)
-    : VRDevice(hardwareUnit, deviceId)
+    : PoseSensorVRDevice(hardwareUnit, deviceId)
 {
-}
-
-VRPositionState* PositionSensorVRDevice::getState()
-{
-    return hardwareUnit()->getSensorState();
-}
-
-VRPositionState* PositionSensorVRDevice::getImmediateState()
-{
-    return hardwareUnit()->getImmediateSensorState(false);
-}
-
-void PositionSensorVRDevice::resetSensor()
-{
-    controller()->resetSensor(index());
 }
 
 DEFINE_TRACE(PositionSensorVRDevice)
 {
-    VRDevice::trace(visitor);
+    PoseSensorVRDevice::trace(visitor);
 }
 
 } // namespace blink

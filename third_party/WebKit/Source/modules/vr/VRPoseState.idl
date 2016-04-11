@@ -6,7 +6,7 @@
 [
     RuntimeEnabled=WebVR,
     GarbageCollected,
-] interface VRPositionState {
+] interface VRPoseState {
     readonly attribute double timeStamp;
     readonly attribute DOMPoint? position;
     readonly attribute DOMPoint? linearVelocity;

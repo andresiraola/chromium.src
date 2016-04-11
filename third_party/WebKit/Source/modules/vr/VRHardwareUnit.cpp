@@ -17,14 +17,14 @@ VRHardwareUnit::VRHardwareUnit(NavigatorVRDevice* navigatorVRDevice)
     : m_nextDeviceId(1)
     , m_frameIndex(0)
     , m_navigatorVRDevice(navigatorVRDevice)
-    , m_canUpdatePositionState(true)
+    , m_canUpdatePoseState(true)
 {
-    m_positionState = VRPositionState::create();
+    m_poseState = VRPoseState::create();
 }
 
 VRHardwareUnit::~VRHardwareUnit()
 {
-    if (!m_canUpdatePositionState)
+    if (!m_canUpdatePoseState)
         Platform::current()->currentThread()->removeTaskObserver(this);
 }
 
@@ -42,11 +42,11 @@ void VRHardwareUnit::updateFromWebVRDevice(const WebVRDevice& device)
     }
 
     if (device.flags & WebVRDeviceTypePosition) {
-        if (!m_positionSensor)
-            m_positionSensor = new PositionSensorVRDevice(this, m_nextDeviceId++);
-        m_positionSensor->updateFromWebVRDevice(device);
-    } else if (m_positionSensor) {
-        m_positionSensor.clear();
+        if (!m_poseSensor)
+            m_poseSensor = new PositionSensorVRDevice(this, m_nextDeviceId++);
+        m_poseSensor->updateFromWebVRDevice(device);
+    } else if (m_poseSensor) {
+        m_poseSensor.clear();
     }
 }
 
@@ -55,8 +55,8 @@ void VRHardwareUnit::addDevicesToVector(HeapVector<Member<VRDevice>>& vrDevices)
     if (m_hmd)
         vrDevices.append(m_hmd);
 
-    if (m_positionSensor)
-        vrDevices.append(m_positionSensor);
+    if (m_poseSensor)
+        vrDevices.append(m_poseSensor);
 }
 
 VRController* VRHardwareUnit::controller()
@@ -64,45 +64,51 @@ VRController* VRHardwareUnit::controller()
     return m_navigatorVRDevice->controller();
 }
 
-VRPositionState* VRHardwareUnit::getSensorState()
+VRPoseState* VRHardwareUnit::getSensorState()
 {
-    if (m_canUpdatePositionState) {
-        m_positionState = getImmediateSensorState(true);
+    if (m_canUpdatePoseState) {
+        m_poseState = getImmediateSensorState(true);
         Platform::current()->currentThread()->addTaskObserver(this);
-        m_canUpdatePositionState = false;
+        m_canUpdatePoseState = false;
     }
 
-    return m_positionState;
+    return m_poseState;
 }
 
-VRPositionState* VRHardwareUnit::getImmediateSensorState(bool updateFrameIndex)
+VRPoseState* VRHardwareUnit::getImmediateSensorState(bool updateFrameIndex)
 {
     WebHMDSensorState state;
     controller()->getSensorState(m_index, state);
     if (updateFrameIndex)
         m_frameIndex = state.frameIndex;
 
-    VRPositionState* immediatePositionState = VRPositionState::create();
-    immediatePositionState->setState(state);
-    return immediatePositionState;
+    VRPoseState* immediatePoseState = VRPoseState::create();
+    immediatePoseState->setState(state);
+    return immediatePoseState;
 }
 
+void VRHardwareUnit::getOrientation(float &x, float &y, float &z, float &w) {
+    x = m_poseState->orientation()->x();
+    y = m_poseState->orientation()->y();
+    z = m_poseState->orientation()->z();
+    w = m_poseState->orientation()->w();
+}
 
 void VRHardwareUnit::didProcessTask()
 {
     // State should be stable until control is returned to the user agent.
-    if (!m_canUpdatePositionState) {
+    if (!m_canUpdatePoseState) {
         Platform::current()->currentThread()->removeTaskObserver(this);
-        m_canUpdatePositionState = true;
+        m_canUpdatePoseState = true;
     }
 }
 
 DEFINE_TRACE(VRHardwareUnit)
 {
     visitor->trace(m_navigatorVRDevice);
-    visitor->trace(m_positionState);
+    visitor->trace(m_poseState);
     visitor->trace(m_hmd);
-    visitor->trace(m_positionSensor);
+    visitor->trace(m_poseSensor);
 }
 
 } // namespace blink

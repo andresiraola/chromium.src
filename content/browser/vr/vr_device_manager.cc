@@ -11,6 +11,11 @@
 #include "build/build_config.h"
 #include "third_party/WebKit/public/platform/modules/vr/WebVR.h"
 
+#if defined(OS_WIN)
+#include "content/browser/vr/oculus/oculus_vr_device_provider.h"
+#include "content/browser/vr/openvr/open_vr_device_provider.h"
+#endif
+
 #if defined(OS_ANDROID)
 #include "content/browser/vr/android/cardboard/cardboard_vr_device_provider.h"
 #endif
@@ -25,11 +30,28 @@ VRDeviceManager::VRDeviceManager()
     : vr_initialized_(false), keep_alive_(false) {
   bindings_.set_connection_error_handler(
       base::Bind(&VRDeviceManager::OnConnectionError, base::Unretained(this)));
+
 // Register VRDeviceProviders for the current platform
 #if defined(OS_ANDROID)
   scoped_ptr<VRDeviceProvider> cardboard_provider(
       new CardboardVRDeviceProvider());
   RegisterProvider(std::move(cardboard_provider));
+#endif
+
+#if defined(OS_WIN)
+
+#if defined(WEBVR_USE_OCULUS)
+  scoped_ptr<VRDeviceProvider> oculus_provider(
+      new OculusVRDeviceProvider());
+  RegisterProvider(oculus_provider.Pass());
+#endif
+
+#if defined(WEBVR_USE_OPENVR)
+  scoped_ptr<VRDeviceProvider> openvr_provider(
+      new OpenVRDeviceProvider());
+  RegisterProvider(openvr_provider.Pass());
+#endif
+
 #endif
 }
 
@@ -102,11 +124,15 @@ mojo::Array<VRDeviceInfoPtr> VRDeviceManager::GetVRDevices() {
     out_devices.push_back(std::move(vr_device_info));
   }
 
-  return out_devices;
+  return std::move(out_devices);
 }
 
 VRDevice* VRDeviceManager::GetDevice(unsigned int index) {
   DCHECK(thread_checker_.CalledOnValidThread());
+
+  if (index == 0) {
+    return NULL;
+  }
 
   DeviceMap::iterator iter = devices_.find(index);
   if (iter == devices_.end()) {

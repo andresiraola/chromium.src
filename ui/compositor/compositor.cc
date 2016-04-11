@@ -103,7 +103,8 @@ Compositor::Compositor(ui::ContextFactory* context_factory,
       context_factory_->DoesCreateTestContexts() ? kTestRefreshRate
                                                  : kDefaultRefreshRate;
   settings.main_frame_before_activation_enabled = false;
-  if (command_line->HasSwitch(switches::kDisableGpuVsync)) {
+  if (command_line->HasSwitch(switches::kDisableGpuVsync) ||
+      command_line->HasSwitch("enable-webvr")) {
     std::string display_vsync_string =
         command_line->GetSwitchValueASCII(switches::kDisableGpuVsync);
     if (display_vsync_string == "gpu") {

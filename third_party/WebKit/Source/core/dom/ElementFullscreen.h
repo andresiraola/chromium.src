@@ -5,19 +5,21 @@
 #ifndef ElementFullscreen_h
 #define ElementFullscreen_h
 
+#include "core/dom/FullscreenOptions.h"
 #include "core/events/EventTarget.h"
 #include "wtf/Allocator.h"
 
 namespace blink {
 
 class Element;
+class FullscreenOptions;
 
 class ElementFullscreen {
     STATIC_ONLY(ElementFullscreen);
 public:
-    static void requestFullscreen(Element&);
+    static void requestFullscreen(Element&, const FullscreenOptions& options);
 
-    static void webkitRequestFullscreen(Element&);
+    static void webkitRequestFullscreen(Element&, const FullscreenOptions& options);
 
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(webkitfullscreenchange);
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(webkitfullscreenerror);

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef VRPositionState_h
-#define VRPositionState_h
+#ifndef VRPoseState_h
+#define VRPoseState_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/dom/DOMPoint.h"
@@ -14,12 +14,12 @@
 
 namespace blink {
 
-class VRPositionState final : public GarbageCollected<VRPositionState>, public ScriptWrappable {
+class VRPoseState final : public GarbageCollected<VRPoseState>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 public:
-    static VRPositionState* create()
+    static VRPoseState* create()
     {
-        return new VRPositionState();
+        return new VRPoseState();
     }
 
     double timeStamp() const { return m_timeStamp; }
@@ -35,7 +35,7 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    VRPositionState();
+    VRPoseState();
 
     double m_timeStamp;
     Member<DOMPoint> m_orientation;
@@ -48,4 +48,4 @@ private:
 
 } // namespace blink
 
-#endif // VRPositionState_h
+#endif // VRPoseState_h

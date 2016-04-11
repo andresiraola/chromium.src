@@ -199,6 +199,11 @@ void Fullscreen::documentWasDisposed()
 
 void Fullscreen::requestFullscreen(Element& element, RequestType requestType)
 {
+    requestFullscreen(element, requestType, FullscreenOptions());
+}
+
+void Fullscreen::requestFullscreen(Element& element, RequestType requestType, const FullscreenOptions& options)
+{
     if (document()->isSecureContext()) {
         UseCounter::count(document(), UseCounter::FullscreenSecureOrigin);
     } else {
@@ -213,6 +218,8 @@ void Fullscreen::requestFullscreen(Element& element, RequestType requestType)
     // If |element| is on top of |doc|'s fullscreen element stack, terminate these substeps.
     if (&element == fullscreenElement())
         return;
+        
+    m_fullscreenOptions = options;     
 
     do {
         // 1. If any of the following conditions are true, terminate these steps and queue a task to fire
@@ -318,6 +325,9 @@ void Fullscreen::fullyExitFullscreen(Document& document)
 
 void Fullscreen::exitFullscreen()
 {
+    if (m_fullscreenOptions.vrDisplay())
+        m_fullscreenOptions.vrDisplay()->exitFullscreen();
+
     // The exitFullscreen() method must run these steps:
 
     // 1. Let doc be the context object. (i.e. "this")
@@ -425,6 +435,9 @@ void Fullscreen::didEnterFullScreenForElement(Element* element)
 
     if (m_fullScreenLayoutObject)
         m_fullScreenLayoutObject->unwrapLayoutObject();
+        
+    if (m_fullscreenOptions.vrDisplay())
+        m_fullscreenOptions.vrDisplay()->didEnterFullScreenForElement(element);
 
     m_fullScreenElement = element;
 
@@ -611,6 +624,7 @@ DEFINE_TRACE(Fullscreen)
     visitor->trace(m_fullScreenElement);
     visitor->trace(m_fullScreenElementStack);
     visitor->trace(m_eventQueue);
+    visitor->trace(m_fullscreenOptions);
 #endif
     WillBeHeapSupplement<Document>::trace(visitor);
     DocumentLifecycleObserver::trace(visitor);

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "modules/vr/VRPositionState.h"
+#include "modules/vr/VRPoseState.h"
 
 namespace blink {
 
@@ -23,12 +23,12 @@ DOMPoint* vecToDomPoint(const WebVRVector3& vec, bool valid)
 
 } // namespace
 
-VRPositionState::VRPositionState()
+VRPoseState::VRPoseState()
     : m_timeStamp(0.0)
 {
 }
 
-void VRPositionState::setState(const WebHMDSensorState &state)
+void VRPoseState::setState(const WebHMDSensorState &state)
 {
     m_timeStamp = state.timestamp;
     m_orientation = vecToDomPoint(state.orientation, state.flags & WebVRSensorStateOrientation);
@@ -39,7 +39,7 @@ void VRPositionState::setState(const WebHMDSensorState &state)
     m_linearAcceleration =  vecToDomPoint(state.linearAcceleration, state.flags & WebVRSensorStateLinearAcceleration);
 }
 
-DEFINE_TRACE(VRPositionState)
+DEFINE_TRACE(VRPoseState)
 {
     visitor->trace(m_orientation);
     visitor->trace(m_position);

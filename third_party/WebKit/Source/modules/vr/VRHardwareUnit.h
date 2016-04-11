@@ -6,7 +6,8 @@
 #define VRHardwareUnit_h
 
 #include "modules/vr/VRFieldOfView.h"
-#include "modules/vr/VRPositionState.h"
+#include "modules/vr/VRPoseState.h"
+#include "platform/graphics/gpu/DrawingBuffer.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebThread.h"
 #include "wtf/text/WTFString.h"
@@ -17,7 +18,7 @@ class VRController;
 class VRDevice;
 class HMDVRDevice;
 class NavigatorVRDevice;
-class PositionSensorVRDevice;
+class PoseSensorVRDevice;
 
 enum VREye {
     VREyeLeft,
@@ -25,7 +26,7 @@ enum VREye {
     VREyeNone,
 };
 
-class VRHardwareUnit : public GarbageCollectedFinalized<VRHardwareUnit>, public WebThread::TaskObserver {
+class VRHardwareUnit : public GarbageCollectedFinalized<VRHardwareUnit>, public WebThread::TaskObserver, public DrawingBuffer::OrientationProvider {
 public:
     explicit VRHardwareUnit(NavigatorVRDevice*);
     virtual ~VRHardwareUnit();
@@ -42,11 +43,13 @@ public:
     VRController* controller();
 
     // VRController queries
-    VRPositionState* getSensorState();
-    VRPositionState* getImmediateSensorState(bool updateFrameIndex);
+    VRPoseState* getSensorState();
+    VRPoseState* getImmediateSensorState(bool updateFrameIndex);
 
     HMDVRDevice* hmd() const { return m_hmd; }
-    PositionSensorVRDevice* positionSensor() const { return m_positionSensor; }
+    PoseSensorVRDevice* poseSensor() const { return m_poseSensor; }
+
+    void getOrientation(float &x, float &y, float &z, float &w) override;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -62,12 +65,12 @@ private:
     unsigned m_frameIndex;
 
     Member<NavigatorVRDevice> m_navigatorVRDevice;
-    Member<VRPositionState> m_positionState;
-    bool m_canUpdatePositionState;
+    Member<VRPoseState> m_poseState;
+    bool m_canUpdatePoseState;
 
     // Device types
     Member<HMDVRDevice> m_hmd;
-    Member<PositionSensorVRDevice> m_positionSensor;
+    Member<PoseSensorVRDevice> m_poseSensor;
 };
 
 } // namespace blink

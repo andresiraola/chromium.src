@@ -80,6 +80,9 @@
 #include <OpenGL/CGLIOSurface.h>
 #endif
 
+#include "gpu/command_buffer/service/vr/oculus/oculus_vr_compositor.h"
+#include "gpu/command_buffer/service/vr/openvr/open_vr_compositor.h"
+
 namespace gpu {
 namespace gles2 {
 
@@ -1009,6 +1012,13 @@ class GLES2DecoderImpl : public GLES2Decoder, public ErrorStateClient {
 
   void DoMatrixLoadfCHROMIUM(GLenum matrix_mode, const GLfloat* matrix);
   void DoMatrixLoadIdentityCHROMIUM(GLenum matrix_mode);
+  
+  // VR Compositor
+  VRCompositor* vr_compositor_ = nullptr;
+  GLuint DoCreateVRCompositorCHROMIUM();
+  void DoSubmitVRCompositorFrameCHROMIUM(GLuint compositor, GLuint texture,
+      GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+  void DoDeleteVRCompositorCHROMIUM(GLuint compositor);
 
   // Creates a Program for the given program.
   Program* CreateProgram(GLuint client_id, GLuint service_id) {
@@ -14293,6 +14303,62 @@ void GLES2DecoderImpl::DoMatrixLoadIdentityCHROMIUM(GLenum matrix_mode) {
   // The matrix_mode is either GL_PATH_MODELVIEW_NV or GL_PATH_PROJECTION_NV
   // since the values of the _NV and _CHROMIUM tokens match.
   glMatrixLoadIdentityEXT(matrix_mode);
+}
+
+GLuint GLES2DecoderImpl::DoCreateVRCompositorCHROMIUM() {
+  // ANGLE not supported yet. :(
+  if (feature_info_->gl_version_info().is_angle)
+    return 0;
+
+  if (!vr_compositor_) {
+#if defined(WEBVR_USE_OCULUS)
+    vr_compositor_ = new OculusVRCompositor();
+    RestoreBufferBindings();
+#elif defined(WEBVR_USE_OPENVR)
+    vr_compositor_ = new OpenVRCompositor();
+#endif
+  }
+
+  return 1;
+}
+
+void GLES2DecoderImpl::DoSubmitVRCompositorFrameCHROMIUM(
+    GLuint compositor, GLuint client_texture_id,
+    GLfloat x, GLfloat y, GLfloat z, GLfloat w) {
+  // ANGLE not supported yet. :(
+  if (feature_info_->gl_version_info().is_angle)
+    return;
+
+  TextureRef* texture_ref = GetTexture(client_texture_id);
+  if (vr_compositor_ && texture_ref) {
+#if defined(WEBVR_USE_OCULUS)
+    ClearAllAttributes();
+#endif
+
+    vr_compositor_->SubmitFrame(texture_ref->service_id(), x, y, z, w);
+
+#if defined(WEBVR_USE_OCULUS)
+    RestoreAllAttributes();
+    RestoreTextureUnitBindings(0);
+    RestoreActiveTexture();
+    RestoreProgramBindings();
+    RestoreBufferBindings();
+    RestoreFramebufferBindings();
+    RestoreGlobalState();
+#endif
+  }
+
+  // The frame submit will likely block. Exit command processing to allow for
+  // context preemption and GPU watchdog checks.
+  ExitCommandProcessingEarly();
+}
+
+void GLES2DecoderImpl::DoDeleteVRCompositorCHROMIUM(GLuint compositor) {
+  if (!vr_compositor_)
+    return;
+
+  delete vr_compositor_;
+  vr_compositor_ = nullptr;
 }
 
 error::Error GLES2DecoderImpl::HandleUniformBlockBinding(

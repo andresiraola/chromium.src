@@ -2,11 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// NOTE: Use of the FullscreenDisplay base class here is a temporary measure
+
 // http://mozvr.github.io/webvr-spec/webvr.html#vrdevice
 [
     RuntimeEnabled=WebVR,
     GarbageCollected,
-] interface VRDevice {
+] interface VRDevice : FullscreenDisplay {
     // An identifier for the distinct hardware unit that this
     // VR Device is a part of.  All VRDevice/Sensors that come
     // from the same hardware will have the same hardwareId.

@@ -26,11 +26,18 @@ public:
     VREyeParameters* getEyeParameters(const String&);
     void setFieldOfView(VRFieldOfView* leftFov = 0, VRFieldOfView* rightFov = 0);
 
+    void didEnterFullScreenForElement(Element* element) override;
+    void exitFullscreen() override;
+
     DECLARE_VIRTUAL_TRACE();
 
 private:
+    void configureRendering(Node* node, bool fullscreen);
+
     Member<VREyeParameters> m_eyeParametersLeft;
     Member<VREyeParameters> m_eyeParametersRight;
+
+    Element* m_fullscreenElement;
 };
 
 } // namespace blink

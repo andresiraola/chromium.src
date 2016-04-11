@@ -4513,6 +4513,27 @@ _FUNCTION_INFO = {
     'extension': 'CHROMIUM_path_rendering',
     'extension_flag': 'chromium_path_rendering',
   },
+  'CreateVRCompositorCHROMIUM': {
+    'decoder_func': 'DoCreateVRCompositorCHROMIUM',
+    'unit_test': False,
+    'client_test': False,
+    'chromium': True,
+    'extension': True,
+  },
+  'SubmitVRCompositorFrameCHROMIUM': {
+    'decoder_func': 'DoSubmitVRCompositorFrameCHROMIUM',
+    'unit_test': False,
+    'client_test': False,
+    'chromium': True,
+    'extension': True,
+  },
+  'DeleteVRCompositorCHROMIUM': {
+    'decoder_func': 'DoDeleteVRCompositorCHROMIUM',
+    'unit_test': False,
+    'client_test': False,
+    'chromium': True,
+    'extension': True,
+  },
 }
 
 

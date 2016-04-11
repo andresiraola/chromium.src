@@ -165,6 +165,8 @@
 #include "storage/browser/fileapi/external_mount_points.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/resource/resource_bundle.h"
+#include "ui/base/ui_base_switches.h"
+#include "ui/gl/gl_switches.h"
 #include "ui/resources/grit/ui_resources.h"
 
 #if defined(OS_WIN)
@@ -1697,6 +1699,26 @@ void ChromeContentBrowserClient::AppendExtraCommandLineSwitches(
     if (browser_command_line.HasSwitch(switches::kIgnoreGpuBlacklist) &&
         !command_line->HasSwitch(switches::kDisableBreakpad))
       command_line->AppendSwitch(switches::kDisableBreakpad);
+
+    // Temp workarounds for WebVR
+    if (browser_command_line.HasSwitch(switches::kEnableWebVR)) {
+      command_line->AppendSwitchASCII(switches::kUseGL,
+          gfx::kGLImplementationDesktopName);
+      command_line->AppendSwitch(switches::kDisableGpuSandbox);
+      // Why doesn't this work?
+      //command_line->AppendSwitch(switches::kDisableDwmComposition);
+    }
+  }
+
+  // Temp workarounds for WebVR
+  if (browser_command_line.HasSwitch(switches::kEnableWebVR)) {
+    command_line->AppendSwitchASCII(switches::kUseGL,
+        gfx::kGLImplementationDesktopName);
+    command_line->AppendSwitch(switches::kDisableGpuSandbox);
+    command_line->AppendSwitch(switches::kDisableGpuVsync);
+
+    // Why doesn't this work?
+    //command_line->AppendSwitch(switches::kDisableDwmComposition);
   }
 
   // The command line switch kEnableBenchmarking needs to be specified along

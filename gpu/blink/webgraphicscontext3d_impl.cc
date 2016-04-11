@@ -1225,6 +1225,15 @@ void WebGraphicsContext3DImpl::waitSync(WGC3Dsync sync,
   gl_->WaitSync(reinterpret_cast<GLsync>(sync), flags, timeout);
 }
 
+DELEGATE_TO_GL_R(createVRCompositorCHROMIUM, CreateVRCompositorCHROMIUM,
+                 WebGLId)
+DELEGATE_TO_GL_6(submitVRCompositorFrameCHROMIUM,
+                 SubmitVRCompositorFrameCHROMIUM,
+                 WebGLId, WebGLId,
+                 WGC3Dfloat, WGC3Dfloat, WGC3Dfloat, WGC3Dfloat)
+DELEGATE_TO_GL_1(deleteVRCompositorCHROMIUM, DeleteVRCompositorCHROMIUM, 
+                 WebGLId)
+
 bool WebGraphicsContext3DImpl::isContextLost() {
   return getGraphicsResetStatusARB() != GL_NO_ERROR;
 }

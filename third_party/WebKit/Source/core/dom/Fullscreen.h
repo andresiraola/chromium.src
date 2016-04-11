@@ -32,6 +32,7 @@
 #include "core/dom/Document.h"
 #include "core/dom/DocumentLifecycleObserver.h"
 #include "core/dom/Element.h"
+#include "core/dom/FullscreenOptions.h"
 #include "platform/Supplementable.h"
 #include "platform/Timer.h"
 #include "platform/geometry/LayoutRect.h"
@@ -69,6 +70,7 @@ public:
     };
 
     void requestFullscreen(Element&, RequestType);
+    void requestFullscreen(Element&, RequestType, const FullscreenOptions& options);
     static void fullyExitFullscreen(Document&);
     void exitFullscreen();
 
@@ -116,6 +118,7 @@ private:
     WillBeHeapDeque<RefPtrWillBeMember<Event>> m_eventQueue;
     LayoutRect m_savedPlaceholderFrameRect;
     RefPtr<ComputedStyle> m_savedPlaceholderComputedStyle;
+    FullscreenOptions m_fullscreenOptions;
 };
 
 inline bool Fullscreen::isActiveFullScreenElement(const Element& element)

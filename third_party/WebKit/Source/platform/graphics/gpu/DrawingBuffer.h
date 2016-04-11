@@ -93,6 +93,11 @@ class PLATFORM_EXPORT DrawingBuffer : public RefCounted<DrawingBuffer>, public W
     };
     WTF_MAKE_NONCOPYABLE(DrawingBuffer);
 public:
+    class OrientationProvider {
+    public:
+        virtual void getOrientation(float &x, float &y, float &z, float &w) = 0;
+    };
+
     enum PreserveDrawingBuffer {
         Preserve,
         Discard
@@ -190,6 +195,9 @@ public:
     // Bind to m_drawFramebufferBinding or m_readFramebufferBinding if it's not 0.
     // Otherwise, bind to the default FBO.
     void restoreFramebufferBindings();
+    
+    void startVRCompositing(OrientationProvider*);
+    void endVRCompositing();
 
 protected: // For unittests
     DrawingBuffer(
@@ -323,6 +331,9 @@ private:
 
     // Used to flip a bitmap vertically.
     Vector<uint8_t> m_scanline;
+    
+    Platform3DObject m_vrCompositor;
+    OrientationProvider* m_orientationProvider;
 };
 
 } // namespace blink

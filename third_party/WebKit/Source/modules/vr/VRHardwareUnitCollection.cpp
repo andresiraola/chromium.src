@@ -17,7 +17,6 @@
 #include "modules/vr/VRController.h"
 #include "modules/vr/VRGetDevicesCallback.h"
 #include "modules/vr/VRHardwareUnit.h"
-#include "modules/vr/VRPositionState.h"
 
 namespace blink {
 

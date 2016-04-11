@@ -172,6 +172,7 @@ DrawingBuffer::DrawingBuffer(PassOwnPtr<WebGraphicsContext3D> context,
     , m_destructionInProgress(false)
     , m_isHidden(false)
     , m_filterQuality(kLow_SkFilterQuality)
+    , m_vrCompositor(0)
 {
     // Used by browser tests to detect the use of a DrawingBuffer.
     TRACE_EVENT_INSTANT0("test_gpu", "DrawingBufferCreation", TRACE_EVENT_SCOPE_GLOBAL);
@@ -189,6 +190,8 @@ DrawingBuffer::~DrawingBuffer()
 #ifndef NDEBUG
     drawingBufferCounter().decrement();
 #endif
+
+    endVRCompositing();
 }
 
 void DrawingBuffer::markContentsChanged()
@@ -259,6 +262,13 @@ bool DrawingBuffer::prepareMailbox(WebExternalTextureMailbox* outMailbox, WebExt
     // Resolve the multisampled buffer into m_colorBuffer texture.
     if (m_antiAliasingMode != None)
         commit();
+        
+    if (m_vrCompositor) {
+        float x = 0.0f, y = 0.0f, z = 0.0f, w = 1.0f;
+        if (m_orientationProvider)
+            m_orientationProvider->getOrientation(x, y, z, w);
+        m_context->submitVRCompositorFrameCHROMIUM(m_vrCompositor, m_colorBuffer.textureId, x, y, z, w);
+    }
 
     if (bitmap) {
         bitmap->setSize(size());
@@ -1011,6 +1021,24 @@ void DrawingBuffer::deleteChromiumImageForTexture(TextureInfo* info)
         m_context->destroyImageCHROMIUM(info->imageId);
         info->imageId = 0;
     }
+}
+
+void DrawingBuffer::startVRCompositing(OrientationProvider* orientationProvider)
+{
+    if (!m_vrCompositor) {
+        m_vrCompositor = m_context->createVRCompositorCHROMIUM();
+    }
+    
+    m_orientationProvider = orientationProvider;
+}
+
+void DrawingBuffer::endVRCompositing()
+{
+    if (m_vrCompositor) {
+        m_context->deleteVRCompositorCHROMIUM(m_vrCompositor);
+        m_vrCompositor = 0;
+    }
+    m_orientationProvider = nullptr;
 }
 
 } // namespace blink

@@ -6,6 +6,7 @@
 #define VRDevice_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+#include "core/dom/FullscreenDisplay.h"
 #include "modules/vr/VRHardwareUnit.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -15,7 +16,7 @@ namespace blink {
 
 class VRController;
 
-class VRDevice : public GarbageCollectedFinalized<VRDevice>, public ScriptWrappable {
+MODULES_EXPORT class VRDevice : public FullscreenDisplay {
     DEFINE_WRAPPERTYPEINFO();
 public:
     virtual ~VRDevice();

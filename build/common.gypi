@@ -1040,9 +1040,9 @@
           'pkg-config': 'pkg-config'
         }],
 
-        # Enable WebVR support by default on Android
+        # Enable WebVR support by on Android and Windows
         # Still requires command line flag to access API
-        ['OS=="android"', {
+        ['OS=="android" or OS=="win"', {
           'enable_webvr%': 1,
         }, {
           'enable_webvr%': 0,
@@ -3074,7 +3074,7 @@
        'defines': ['V8_USE_EXTERNAL_STARTUP_DATA'],
       }],
       ['enable_webvr==1', {
-        'defines': ['ENABLE_WEBVR'],
+        'defines': ['ENABLE_WEBVR', 'WEBVR_USE_OCULUS'],
       }],
 
       # SAFE_BROWSING_DB_LOCAL - service manages a local database.

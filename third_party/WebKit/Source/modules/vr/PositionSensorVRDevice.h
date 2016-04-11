@@ -5,23 +5,14 @@
 #ifndef PositionSensorVRDevice_h
 #define PositionSensorVRDevice_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
-#include "modules/vr/VRDevice.h"
-#include "modules/vr/VRPositionState.h"
-#include "platform/heap/Handle.h"
-#include "wtf/Forward.h"
-#include "wtf/text/WTFString.h"
+#include "modules/vr/PoseSensorVRDevice.h"
 
 namespace blink {
 
-class PositionSensorVRDevice final : public VRDevice {
+class PositionSensorVRDevice final : public PoseSensorVRDevice {
     DEFINE_WRAPPERTYPEINFO();
 public:
     PositionSensorVRDevice(VRHardwareUnit*, unsigned);
-
-    VRPositionState* getState();
-    VRPositionState* getImmediateState();
-    void resetSensor();
 
     DECLARE_VIRTUAL_TRACE();
 };

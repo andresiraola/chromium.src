@@ -1836,7 +1836,17 @@
     '<@(private_browser_sources)',
   ],
   'conditions': [
-    ['OS != "win"', {
+    ['OS == "win"', {
+      'dependencies': [
+        '../third_party/libovr/libovr.gyp:libovr',
+      ],
+      'sources': [
+        'browser/vr/oculus/oculus_vr_device.cc',
+        'browser/vr/oculus/oculus_vr_device.h',
+        'browser/vr/oculus/oculus_vr_device_provider.cc',
+        'browser/vr/oculus/oculus_vr_device_provider.h',
+      ]
+    }, { # os != "win"
       'sources': [
         'browser/file_descriptor_info_impl.cc',
         'browser/file_descriptor_info_impl.h',
@@ -2218,6 +2228,38 @@
         'browser/vr/android/cardboard/cardboard_vr_device_provider.cc',
         'browser/vr/android/cardboard/cardboard_vr_device_provider.h',
       ],
+    }],
+    ['enable_webvr==1 and OS=="win"', {
+      'dependencies': [
+        '../third_party/libovr/libovr.gyp:libovr',
+      ],
+      'sources': [
+        'browser/vr/oculus/oculus_vr_device.cc',
+        'browser/vr/oculus/oculus_vr_device.h',
+        'browser/vr/oculus/oculus_vr_device_provider.cc',
+        'browser/vr/oculus/oculus_vr_device_provider.h',
+      ]
+    }],
+    ['enable_webvr==1 and OS=="win"', {
+      'dependencies': [
+        '../third_party/openvr/openvr.gyp:openvr',
+      ],
+      'sources': [
+        'browser/vr/openvr/open_vr_device.cc',
+        'browser/vr/openvr/open_vr_device.h',
+        'browser/vr/openvr/open_vr_device_provider.cc',
+        'browser/vr/openvr/open_vr_device_provider.h',
+      ],
+      'msvs_settings': {
+        'VCLinkerTool': {
+          'AdditionalDependencies': [
+            'openvr_api.lib',
+          ],
+          'AdditionalLibraryDirectories': [
+            '../third_party/openvr/openvr/lib/win32',
+          ],
+        },
+      },
     }],
   ],
 }
